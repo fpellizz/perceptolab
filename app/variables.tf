@@ -2,13 +2,6 @@
 # Per tutte le variabili sono presenti dei valori di default, che però possono
 # essere sovrascritti da quelli definiti nel file terraform.tfvars
 # che solitamente viene ignorato tramite .gitignore per ragioni di sicurezza
-variable "kube_config" {
-  type    = string
-  default = "~/.kube/config"
-  #default = "./resources/config"
-  description = "Path del kubeconfig file"
-}
-
 variable "deployment_name" {
   type    = string
   default = "devops-test"

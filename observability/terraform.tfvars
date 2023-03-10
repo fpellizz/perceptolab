@@ -1,4 +1,4 @@
-kube_config = "./resources/config"
+
 prometheus_chart = "prometheus"
 prometheus_name = "prometheus"
 prometheus_repository = "https://prometheus-community.github.io/helm-charts"

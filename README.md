@@ -109,6 +109,7 @@ No modules.
 |------|-------------|
 | <a name="output_distribution_name"></a> [distribution\_name](#output\_distribution\_name) | Helm distribution name, utilizzato per il deploy dell'app |
 | <a name="output_helm_chart"></a> [helm\_chart](#output\_helm\_chart) | Helm chart name, utilizzato per il deploy dell'app |
+| <a name="output_kubeconfig_file_path"></a> [kubeconfig\_file\_path](#output\_kubeconfig\_file\_path) | Path del file di autenticazione del cluster Kubernetes |
 | <a name="output_namespace"></a> [namespace](#output\_namespace) | Namespace per il deploy |
 | <a name="output_postgres_db_name"></a> [postgres\_db\_name](#output\_postgres\_db\_name) | Postgres port, utilizzato per il deploy dell'app |
 | <a name="output_postgres_db_password"></a> [postgres\_db\_password](#output\_postgres\_db\_password) | Postgres password, codificata in base64 utilizzata per il deploy dell'app |
@@ -164,7 +165,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_deployment_name"></a> [deployment\_name](#input\_deployment\_name) | Nome del deployment, utilizzato per identificare tutti gli oggetti deployati | `string` | `"devops-test"` | no |
 | <a name="input_image"></a> [image](#input\_image) | Docker image da utilizzare nel deploy | `string` | `"ghcr.io/perceptolab/devops-demo-app:0.0.2"` | no |
-| <a name="input_kube_config"></a> [kube\_config](#input\_kube\_config) | Path del kubeconfig file | `string` | `"~/.kube/config"` | no |
 | <a name="input_resources_limit_cpu"></a> [resources\_limit\_cpu](#input\_resources\_limit\_cpu) | Valore di cpu limit per l'applicazione | `string` | `"1000m"` | no |
 | <a name="input_resources_limit_memory"></a> [resources\_limit\_memory](#input\_resources\_limit\_memory) | Valore di memory limit per l'applicazione | `string` | `"1Gi"` | no |
 | <a name="input_resources_reservation_cpu"></a> [resources\_reservation\_cpu](#input\_resources\_reservation\_cpu) | Valore di cpu reservation per l'applicazione | `string` | `"250m"` | no |
@@ -221,15 +221,14 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_grafana_chart"></a> [grafana\_chart](#input\_grafana\_chart) | n/a | `string` | `"grafana"` | no |
-| <a name="input_grafana_name"></a> [grafana\_name](#input\_grafana\_name) | n/a | `string` | `"grafana"` | no |
-| <a name="input_grafana_repository"></a> [grafana\_repository](#input\_grafana\_repository) | n/a | `string` | `"https://grafana.github.io/helm-charts"` | no |
-| <a name="input_grafana_version"></a> [grafana\_version](#input\_grafana\_version) | n/a | `string` | `"6.52.1"` | no |
-| <a name="input_kube_config"></a> [kube\_config](#input\_kube\_config) | n/a | `string` | `"~/.kube/config"` | no |
-| <a name="input_prometheus_chart"></a> [prometheus\_chart](#input\_prometheus\_chart) | n/a | `string` | `"prometheus"` | no |
-| <a name="input_prometheus_name"></a> [prometheus\_name](#input\_prometheus\_name) | n/a | `string` | `"prometheus"` | no |
-| <a name="input_prometheus_repository"></a> [prometheus\_repository](#input\_prometheus\_repository) | n/a | `string` | `"https://prometheus-community.github.io/helm-charts"` | no |
-| <a name="input_prometheus_version"></a> [prometheus\_version](#input\_prometheus\_version) | n/a | `string` | `"19.7.2"` | no |
+| <a name="input_grafana_chart"></a> [grafana\_chart](#input\_grafana\_chart) | Nome del chart Helm di Grafana | `string` | `"grafana"` | no |
+| <a name="input_grafana_name"></a> [grafana\_name](#input\_grafana\_name) | Nome della distribuzione di Grafana | `string` | n/a | yes |
+| <a name="input_grafana_repository"></a> [grafana\_repository](#input\_grafana\_repository) | URL del repository Helm di Grafana | `string` | `"https://grafana.github.io/helm-charts"` | no |
+| <a name="input_grafana_version"></a> [grafana\_version](#input\_grafana\_version) | Versione di Grafana | `string` | `"6.52.1"` | no |
+| <a name="input_prometheus_chart"></a> [prometheus\_chart](#input\_prometheus\_chart) | Nome del chart Helm di Prometheus | `string` | `"prometheus"` | no |
+| <a name="input_prometheus_name"></a> [prometheus\_name](#input\_prometheus\_name) | Nome della distribuzione di Prometheus | `string` | `"prometheus"` | no |
+| <a name="input_prometheus_repository"></a> [prometheus\_repository](#input\_prometheus\_repository) | URL del repository Helm di Prometheus | `string` | `"https://prometheus-community.github.io/helm-charts"` | no |
+| <a name="input_prometheus_version"></a> [prometheus\_version](#input\_prometheus\_version) | Versione di Prometheus | `string` | `"19.7.2"` | no |
 
 ## Outputs
 

@@ -1,10 +1,9 @@
 provider "helm" {
-  # Several Kubernetes authentication methods are possible: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#authentication
   kubernetes {
-    config_path = pathexpand(var.kube_config)
+    config_path = pathexpand(data.terraform_remote_state.postgres_state.outputs.kubeconfig_file_path)
   }
 }
 
 provider "kubernetes" {
-  config_path = pathexpand(var.kube_config)
+  config_path = pathexpand(data.terraform_remote_state.postgres_state.outputs.kubeconfig_file_path)
 }
