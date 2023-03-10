@@ -1,10 +1,10 @@
- Project Title
+## Project Title
 
 **DO-CC1 - Kubernetes and Monitoring**
 
 ---
 
-## Descrizione 
+## Descrizione 
 
 Procedura automatizzata per il deploy di un'appliazione web, in un cluster kubenteres.
 
@@ -15,17 +15,16 @@ Ai due step precedenti se ne aggiunge un terzo che gestisce la creazione di un c
 Tutta la procedura di deploy è gestita con Terraform. 
 La scelta di questo strumento è dovuta in parte alla flessibilità dei vari provider disponibili e alla gestione degli stati remoti dei vari deploy e la possibilità di essere integrato in strumenti di automazione (ad esempio GitHub Actions, Bitbucket Pipelines)
 
-## Getting Started
-
+## Getting Started 
 ---
 
-## Dipendenze
+## Dipendenze
 
 Terraform v1.4.0 (o superiore)
 
 K3s (o altra distrubuzione Kubernetes)
 
-## Installazione
+## Installazione
 
 Per effettuare il deploy dello stack è sufficiente eseguire lo script bash "create_all.sh"
 
@@ -43,7 +42,7 @@ Il passo successivo è quello del plan, ovvero dove recupera lo stato attuale e 
 
 Come ultimo step viene fatto l'apply delle modifiche.
 
-## Disinstallazione
+## Disinstallazione
 
 La rimozione di tutte le risorse è altrettanto facile, basta eseguire lo script bash "destroy_all.sh"
 
@@ -53,9 +52,9 @@ La rimozione di tutte le risorse è altrettanto facile, basta eseguire lo script
 
 Il destroy fa il processo inverso del create, si sposta nelle varie cartelle del progetto, ed esegue il destroy di tutte le risorse definite nella cartella del progetto
 
-## Componenti
+## Componenti
 
-## postgres
+## postgres
 
 Il primo applicativo ad essere deployato è il database postgres.
 
@@ -117,7 +116,7 @@ No modules.
 | <a name="output_postgres_db_user"></a> [postgres\_db\_user](#output\_postgres\_db\_user) | Postgres user, codificato in base64 utilizzato per il deploy dell'app |
 <!-- END_TF_DOCS -->
 
-## app
+## app
 
 L'applicazione viene deployata utilizzando il manifest, ma non direttamente. 
 Il contenuto dello yaml è stato prima "tradotto" per Terraform utilizzando la funzione yamldecode di Terraform
@@ -177,7 +176,7 @@ No modules.
 No outputs.
 <!-- END_TF_DOCS -->
 
-## monitoring
+## monitoring
 
 Infine giunge il monitoring. Uno stack composto da Grafana e Prometheus.
 
