@@ -1,4 +1,4 @@
-kube_config = "./resources/config"
+
 deployment_name = "devops-test"
 image = "ghcr.io/perceptolab/devops-demo-app:0.0.2"
 resources_limit_cpu = "500m"

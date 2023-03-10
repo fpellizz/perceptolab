@@ -33,7 +33,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_deployment_name"></a> [deployment\_name](#input\_deployment\_name) | Nome del deployment, utilizzato per identificare tutti gli oggetti deployati | `string` | `"devops-test"` | no |
 | <a name="input_image"></a> [image](#input\_image) | Docker image da utilizzare nel deploy | `string` | `"ghcr.io/perceptolab/devops-demo-app:0.0.2"` | no |
-| <a name="input_kube_config"></a> [kube\_config](#input\_kube\_config) | Path del kubeconfig file | `string` | `"~/.kube/config"` | no |
 | <a name="input_resources_limit_cpu"></a> [resources\_limit\_cpu](#input\_resources\_limit\_cpu) | Valore di cpu limit per l'applicazione | `string` | `"1000m"` | no |
 | <a name="input_resources_limit_memory"></a> [resources\_limit\_memory](#input\_resources\_limit\_memory) | Valore di memory limit per l'applicazione | `string` | `"1Gi"` | no |
 | <a name="input_resources_reservation_cpu"></a> [resources\_reservation\_cpu](#input\_resources\_reservation\_cpu) | Valore di cpu reservation per l'applicazione | `string` | `"250m"` | no |

@@ -41,6 +41,7 @@ No modules.
 |------|-------------|
 | <a name="output_distribution_name"></a> [distribution\_name](#output\_distribution\_name) | Helm distribution name, utilizzato per il deploy dell'app |
 | <a name="output_helm_chart"></a> [helm\_chart](#output\_helm\_chart) | Helm chart name, utilizzato per il deploy dell'app |
+| <a name="output_kubeconfig_file_path"></a> [kubeconfig\_file\_path](#output\_kubeconfig\_file\_path) | Path del file di autenticazione del cluster Kubernetes |
 | <a name="output_namespace"></a> [namespace](#output\_namespace) | Namespace per il deploy |
 | <a name="output_postgres_db_name"></a> [postgres\_db\_name](#output\_postgres\_db\_name) | Postgres port, utilizzato per il deploy dell'app |
 | <a name="output_postgres_db_password"></a> [postgres\_db\_password](#output\_postgres\_db\_password) | Postgres password, codificata in base64 utilizzata per il deploy dell'app |

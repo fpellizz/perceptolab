@@ -34,3 +34,8 @@ output "postgres_db_user" {
   value = base64encode(var.db_user)
   description = "Postgres user, codificato in base64 utilizzato per il deploy dell'app"
 }
+
+output "kubeconfig_file_path" {
+  value = var.kube_config
+  description = "Path del file di autenticazione del cluster Kubernetes"
+}
