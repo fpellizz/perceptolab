@@ -1,0 +1,256 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-demo-app
+  namespace: perceptolab
+  labels:
+    app: devops-demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-demo-app
+  template:
+    metadata:
+      labels:
+        app: devops-demo-app
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: '8081'
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+        - name: appcomposer
+          image: >-
+            ghcr.io/perceptolab/devops-demo-app:0.0.2
+          ports:
+            - name: tcp8080
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod,kubernetes,monitoring          
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: devops-demo-secret
+                  key: DB_PASS
+                  optional: false
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: devops-demo-secret
+                  key: DB_USER
+                  optional: false				  
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-demo-configmap
+                  key: DB_HOST
+                  optional: false
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-demo-configmap
+                  key: DB_PORT
+                  optional: false
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-demo-configmap
+                  key: DB_NAME
+                  optional: false		  
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '0.5'
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            capabilities: {}
+            privileged: false
+            runAsUser: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+          stdin: true
+          tty: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      affinity: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+{
+  "apiVersion" = "apps/v1"
+  "kind" = "Deployment"
+  "metadata" = {
+    "labels" = {
+      "app" = "devops-demo-app"
+    }
+    "name" = "devops-demo-app"
+    "namespace" = "perceptolab"
+  }
+  "spec" = {
+    "progressDeadlineSeconds" = 600
+    "replicas" = 1
+    "revisionHistoryLimit" = 10
+    "selector" = {
+      "matchLabels" = {
+        "app" = "devops-demo-app"
+      }
+    }
+    "strategy" = {
+      "rollingUpdate" = {
+        "maxSurge" = 1
+        "maxUnavailable" = 0
+      }
+      "type" = "RollingUpdate"
+    }
+    "template" = {
+      "metadata" = {
+        "annotations" = {
+          "prometheus.io/path" = "/actuator/prometheus"
+          "prometheus.io/port" = "8081"
+          "prometheus.io/scrape" = "true"
+        }
+        "labels" = {
+          "app" = "devops-demo-app"
+        }
+      }
+      "spec" = {
+        "affinity" = {}
+        "containers" = [
+          {
+            "env" = [
+              {
+                "name" = "SPRING_PROFILES_ACTIVE"
+                "value" = "prod,kubernetes,monitoring"
+              },
+              {
+                "name" = "DB_PASS"
+                "valueFrom" = {
+                  "secretKeyRef" = {
+                    "key" = "DB_PASS"
+                    "name" = "devops-demo-secret"
+                    "optional" = false
+                  }
+                }
+              },
+              {
+                "name" = "DB_USER"
+                "valueFrom" = {
+                  "secretKeyRef" = {
+                    "key" = "DB_USER"
+                    "name" = "devops-demo-secret"
+                    "optional" = false
+                  }
+                }
+              },
+              {
+                "name" = "DB_HOST"
+                "valueFrom" = {
+                  "configMapKeyRef" = {
+                    "key" = "DB_HOST"
+                    "name" = "devops-demo-configmap"
+                    "optional" = false
+                  }
+                }
+              },
+              {
+                "name" = "DB_PORT"
+                "valueFrom" = {
+                  "configMapKeyRef" = {
+                    "key" = "DB_PORT"
+                    "name" = "devops-demo-configmap"
+                    "optional" = false
+                  }
+                }
+              },
+              {
+                "name" = "DB_NAME"
+                "valueFrom" = {
+                  "configMapKeyRef" = {
+                    "key" = "DB_NAME"
+                    "name" = "devops-demo-configmap"
+                    "optional" = false
+                  }
+                }
+              },
+            ]
+            "image" = "ghcr.io/perceptolab/devops-demo-app:0.0.2"
+            "imagePullPolicy" = "Always"
+            "livenessProbe" = {
+              "failureThreshold" = 3
+              "httpGet" = {
+                "path" = "/actuator/health"
+                "port" = 8080
+                "scheme" = "HTTP"
+              }
+              "initialDelaySeconds" = 30
+              "periodSeconds" = 20
+              "successThreshold" = 1
+              "timeoutSeconds" = 10
+            }
+            "name" = "appcomposer"
+            "ports" = [
+              {
+                "containerPort" = 8080
+                "name" = "tcp8080"
+                "protocol" = "TCP"
+              },
+            ]
+            "resources" = {
+              "limits" = {
+                "cpu" = "1"
+                "memory" = "1Gi"
+              }
+              "requests" = {
+                "cpu" = "0.5"
+                "memory" = "512Mi"
+              }
+            }
+            "securityContext" = {
+              "allowPrivilegeEscalation" = false
+              "capabilities" = {}
+              "privileged" = false
+              "readOnlyRootFilesystem" = false
+              "runAsNonRoot" = true
+              "runAsUser" = 1000
+            }
+            "stdin" = true
+            "terminationMessagePath" = "/dev/termination-log"
+            "terminationMessagePolicy" = "File"
+            "tty" = true
+          },
+        ]
+        "dnsPolicy" = "ClusterFirst"
+        "restartPolicy" = "Always"
+        "schedulerName" = "default-scheduler"
+        "securityContext" = {}
+        "terminationGracePeriodSeconds" = 30
+      }
+    }
+  }
+}

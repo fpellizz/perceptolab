@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-demo-serivce
+  namespace: perceptolab
+spec:
+  ports:
+    - name: tcp8080
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: devops-demo-app
+  type: ClusterIP
+  sessionAffinity: None
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  internalTrafficPolicy: Cluster
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-demo-serivce-lb
+  namespace: perceptolab    
+spec:
+  type: LoadBalancer
+  selector:
+    app: devops-demo-app
+  ports:
+    - name: tcp8080
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devops-demo-configmap
+  namespace: perceptolab
+data:
+  DB_HOST: 'postgres-postgresql'
+  DB_PORT: '5432'
+  DB_NAME: 'devops-demo-db'
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: devops-demo-secret
+  namespace: perceptolab  
+type: Opaque
+data:
+  DB_USER: cG9zdGdyZXM=
+  DB_PASS: VjNyeVN0cjBuZ1Bhc3N3MHJk
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-demo-app
+  namespace: perceptolab
+  labels:
+    app: devops-demo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-demo-app
+  template:
+    metadata:
+      labels:
+        app: devops-demo-app
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: '8080'
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+        - name: appcomposer
+          image: >-
+            ghcr.io/perceptolab/devops-demo-app:0.0.2
+          ports:
+            - name: tcp8080
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: devops-demo-secret
+                  key: DB_PASS
+                  optional: false
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: devops-demo-secret
+                  key: DB_USER
+                  optional: false				  
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-demo-configmap
+                  key: DB_HOST
+                  optional: false
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-demo-configmap
+                  key: DB_PORT
+                  optional: false
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-demo-configmap
+                  key: DB_NAME
+                  optional: false		  
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '0.5'
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            capabilities: {}
+            privileged: false
+            runAsUser: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+          stdin: true
+          tty: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      affinity: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-demo-ingress
+  namespace: perceptolab  
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: devops-demo-serivce
+            port:
+              number: 8080
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: devops-test-network-policy
+  namespace: perceptolab
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: devops-test-app
+    ports:
+    - protocol: TCP
+      port: 5432
+  egress:
+  - {}

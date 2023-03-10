@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devops-demo-configmap
+  namespace: perceptolab
+data:
+  DB_HOST: 'postgres-postgresql'
+  DB_PORT: '5432'
+  DB_NAME: 'devops-demo-db'
